@@ -11,7 +11,6 @@
   }
 
   :root {
-    /* Paleta Light Mode ExpertoYa! */
     --background: #FDFCF4;
     --foreground: #283593;
     --card: #FFFFFF;
@@ -52,7 +51,6 @@
   }
 
   .dark {
-    /* Paleta Dark Mode ExpertoYa! */
     --background: #121826;
     --foreground: #FDFCF4;
     --card: #1F2937;
