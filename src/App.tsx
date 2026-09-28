@@ -160,7 +160,6 @@ export default function App() {
           </Card>
         </section>
 
-        {/* Sección: Estados del Sistema (Demostración de Colores Semánticos) */}
         <section className="space-y-4">
           <div className="space-y-1">
             <h2 className="text-xl font-bold tracking-tight">
@@ -172,7 +171,6 @@ export default function App() {
           </div>
 
           <div className="space-y-3">
-            {/* Alerta de Éxito (Success - Verde) */}
             <Alert variant="success">
               <CheckCircle2 className="h-4 w-4" />
               <AlertTitle>Operación Exitosa</AlertTitle>
@@ -181,7 +179,6 @@ export default function App() {
               </AlertDescription>
             </Alert>
 
-            {/* Alerta de Advertencia (Warning - Amarillo / Naranja) */}
             <Alert variant="warning">
               <AlertTriangle className="h-4 w-4" />
               <AlertTitle>Alta Demanda en la Zona</AlertTitle>
@@ -190,7 +187,6 @@ export default function App() {
               </AlertDescription>
             </Alert>
 
-            {/* Alerta de Error (Danger/Destructive - Rojo) */}
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Error en la Validación</AlertTitle>
