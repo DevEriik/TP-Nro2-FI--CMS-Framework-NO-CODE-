@@ -7,18 +7,34 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label"
+
+
+// IMPORTS DE ERICK (Entrante)
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { useTheme } from "@/components/theme-provider";
+import {
+  Sun,
+  Moon,
+  CheckCircle2,
+  AlertTriangle,
+  AlertCircle,
+} from "lucide-react";
+
+// TU IMPORT (Actual)
 import { ModuloUsuarios } from "./components/moduloUsuarios";
 
 export default function App() {
+  const { theme, setTheme } = useTheme()
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <header className="border-b border-border bg-background">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <span className="text-base font-semibold tracking-tight">
-              ExpertoYa
+            <span className="text-base font-semibold tracking-tight text-primary">
+              ExpertoYa!
             </span>
             <nav className="flex items-center gap-6 text-sm text-muted-foreground">
               <a href="#" className="hover:text-foreground">
@@ -32,7 +48,20 @@ export default function App() {
               </a>
             </nav>
           </div>
-          <div>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              title={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+              aria-label="Alternar modo oscuro"
+            >
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4 text-warning" />
+              ) : (
+                <Moon className="h-4 w-4 text-primary" />
+              )}
+            </Button>
             <Button variant="outline" size="sm">
               Iniciar Sesión
             </Button>
@@ -139,6 +168,43 @@ export default function App() {
               </form>
             </CardContent>
           </Card>
+        </section>
+
+        <section className="space-y-4">
+          <div className="space-y-1">
+            <h2 className="text-xl font-bold tracking-tight">
+              Estados del Sistema
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Demostración visual de alertas de estado utilizando los tokens semánticos oficiales de ExpertoYa! en modo claro y oscuro.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <Alert variant="success">
+              <CheckCircle2 className="h-4 w-4" />
+              <AlertTitle>Operación Exitosa</AlertTitle>
+              <AlertDescription>
+                Tu solicitud de cotización ha sido confirmada con éxito. El profesional matriculado se contactará a la brevedad.
+              </AlertDescription>
+            </Alert>
+
+            <Alert variant="warning">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Alta Demanda en la Zona</AlertTitle>
+              <AlertDescription>
+                Atención: Alta concurrencia de pedidos en este rubro. El tiempo estimado de respuesta puede demorar hasta 24 horas hábiles.
+              </AlertDescription>
+            </Alert>
+
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error en la Validación</AlertTitle>
+              <AlertDescription>
+                No se pudo procesar la solicitud. Por favor verifica que los campos obligatorios del formulario estén completos y vuelve a intentar.
+              </AlertDescription>
+            </Alert>
+          </div>
         </section>
         <ModuloUsuarios />
       </main>
