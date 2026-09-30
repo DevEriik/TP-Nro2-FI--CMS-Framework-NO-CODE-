@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label"
 
 
-// IMPORTS DE ERICK (Entrante)
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useTheme } from "@/components/theme-provider";
 import {
@@ -22,7 +21,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-// TU IMPORT (Actual)
 import { ModuloUsuarios } from "./components/moduloUsuarios";
 
 export default function App() {

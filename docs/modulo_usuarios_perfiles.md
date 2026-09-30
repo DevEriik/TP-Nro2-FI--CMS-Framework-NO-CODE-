@@ -32,10 +32,15 @@ El módulo expone dos *endpoints* REST en **`backend/moduloUsuarios.js`** y su i
 
 ## 3. Librerías, Plugins y Componentes Utilizados
 
-| Librería / Recurso | Capa | Propósito y Función en el Módulo |
-| :--- | :--- | :--- |
-| **`express`** | Backend | Framework principal para definir las rutas `POST` y `GET`, procesar JSON (`express.json()`) y gestionar respuestas HTTP. |
-| **`bcryptjs`** | Backend (Seguridad) | Librería criptográfica empleada para encriptar las contraseñas (`bcrypt.genSalt(10)` y `bcrypt.hash()`), evitando guardar claves en texto plano. |
-| **`jsonwebtoken` (JWT)** | Backend (Sesiones) | Librería utilizada para firmar tokens de sesión locales (`jwt.sign()`), resolviendo la autenticación sin depender de sistemas externos. |
-| **`cors`** | Backend (Middleware) | Habilita la comunicación local entre el servidor Express y el cliente en React/Vite. |
-| **`Shadcn/ui + Radix UI`** | Frontend (UI) | Componentes accesibles (`Card`, `Input`, `Label`, `Button`) estilizados con **Tailwind CSS** para el formulario de registro y el visor de perfiles. |
+| Librería / Recurso         | Capa                 | Propósito y Función en el Módulo |
+| :--------------------------| :------------------- | :------------------------------- |
+
+| **`express`**              | Backend              | Framework principal para definir las rutas `POST` y `GET`, procesar JSON (`express.json()`) y gestionar respuestas HTTP. |
+
+| **`bcryptjs`**             | Backend (Seguridad)  | Librería criptográfica empleada para encriptar las contraseñas (`bcrypt.genSalt(10)` y `bcrypt.hash()`), evitando guardar claves en texto plano. |
+
+| **`jsonwebtoken`(JWT)**    | Backend (Sesiones)   | Librería utilizada para firmar tokens de sesión locales (`jwt.sign()`), resolviendo la autenticación sin depender de sistemas externos. |
+
+| **`cors`**                 | Backend (Middleware) | Habilita la comunicación local entre el servidor Express y el cliente en React/Vite. |
+
+| **`Shadcn/ui + Radix UI`** | Frontend (UI)        | Componentes accesibles (`Card`, `Input`, `Label`, `Button`) estilizados con **Tailwind CSS** para el formulario de registro y el visor de perfiles. |  

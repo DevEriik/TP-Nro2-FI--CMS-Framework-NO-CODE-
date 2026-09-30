@@ -1,9 +1,7 @@
 /**
- * MÓDULO: Gestión de Usuarios y Perfiles - ExpertoYa
- * Autora: Daniela Oñatibia (Rama: feature/dani)
- * Descripción: Registro de clientes/profesionales con encriptación de contraseñas
- * y consulta de perfiles profesionales (100% local, sin interoperabilidad externa).
- */
+ * MÓDULO: Gestión de Usuarios y Perfiles 
+ * Registro de clientes/profesionales con encriptación de contraseñas
+ * y consulta de perfiles profesionales**/
 
 import express from "express";
 import cors from "cors";
@@ -16,7 +14,6 @@ app.use(express.json());
 
 const JWT_SECRET = "expertoya_clave_secreta_local_2026";
 
-// Base de datos local en memoria para demostración 
 const usuariosDB = [
     {
         id: 1,
@@ -44,50 +41,37 @@ const usuariosDB = [
     },
 ];
 
-/**
- * ENDPOINT 1: POST /api/usuarios/registro
- * Registra un nuevo usuario (Cliente o Profesional) encriptando su contraseña con bcryptjs
- * y generando un token de sesión local con JWT.
- */
+
 app.post("/api/usuarios/registro", async (req, res) => {
     try {
         const { nombreCompleto, email, password, rol, oficio, zona } = req.body;
-
-        // Validación de campos obligatorios
         if (!nombreCompleto || !email || !password || !rol) {
         return res.status(400).json({
             error:
             "Todos los campos obligatorios (nombreCompleto, email, password, rol) deben completarse.",
         });
         }
-
-        // Verificar si el correo ya está registrado
         const usuarioExistente = usuariosDB.find((u) => u.email === email);
         if (usuarioExistente) {
         return res.status(409).json({
             error: "El correo electrónico ya se encuentra registrado en ExpertoYa.",
         });
     }
-
-    // Encriptación de contraseña mediante librería bcryptjs (Salt rounds: 10)
+    // Encriptación de contraseña mediante librería bcryptjs
     const salt = await bcrypt.genSalt(10);
     const passwordEncriptada = await bcrypt.hash(password, salt);
-
-    //  Creación del nuevo usuario/perfil
     const nuevoUsuario = {
         id: usuariosDB.length + 1,
         nombreCompleto,
         email,
         passwordHash: passwordEncriptada,
-        rol, // cliente o profesioanl
+        rol, 
         oficio: rol === "profesional" ? oficio || "General" : null,
         zona: zona || "Alto Valle (Neuquén / Río Negro)",
         verificado: false,
         fechaRegistro: new Date().toISOString(),
     };
-
     usuariosDB.push(nuevoUsuario);
-
     // Generación de token local con jsonwebtoken (JWT)
     const token = jwt.sign(
         { id: nuevoUsuario.id, email: nuevoUsuario.email, rol: nuevoUsuario.rol },
@@ -115,20 +99,16 @@ app.post("/api/usuarios/registro", async (req, res) => {
     }
 });
 
-/**
- * ENDPOINT 2: GET /api/usuarios/:id
- * Obtiene la información pública del perfil de un cliente o profesional por su ID.
- */
+
+
 app.get("/api/usuarios/:id", (req, res) => {
     const idBuscado = parseInt(req.params.id, 10);
     const usuario = usuariosDB.find((u) => u.id === idBuscado);
-
     if (!usuario) {
         return res.status(404).json({
         error: `No se encontró ningún usuario o profesional con el ID ${idBuscado}.`,
         });
     }
-
     // Retornamos los datos del perfil ocultando la contraseña encriptada
     const { passwordHash, ...perfilPublico } = usuario;
     return res.status(200).json({
@@ -137,7 +117,6 @@ app.get("/api/usuarios/:id", (req, res) => {
     });
 });
 
-// Servidor local del módulo en el puerto 3001
 const PORT = 3001;
 app.listen(PORT, () => {
     console.log(
