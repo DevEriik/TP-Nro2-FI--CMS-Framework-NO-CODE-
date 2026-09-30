@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { ResenaForm } from '@/components/resenas/ResenaForm'
 import { ResenasList } from '@/components/resenas/ResenasList'
+import { useTheme } from "@/components/theme-provider"
+import { ModuloUsuarios } from "./components/moduloUsuarios"
 
 import {
   Card,
@@ -14,7 +16,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
-import { useTheme } from "@/components/theme-provider"
 import {
   Sun,
   Moon,
@@ -39,8 +40,6 @@ const NAV_ITEMS = [
   { id: 'cotizacion', label: 'Cotizar', icon: ClipboardList, href: '#cotizacion' },
   { id: 'resenas', label: 'Reseñas', icon: Star, href: '#resenas' },
 ]
-
-import { ModuloUsuarios } from "./components/moduloUsuarios"
 
 export default function App() {
   const { theme, setTheme } = useTheme()
@@ -78,7 +77,7 @@ export default function App() {
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
       <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-md transition-colors">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-6 lg:gap-8">
+          <div className="flex items-center gap-2 lg:gap-8">
             <a
               href="#inicio"
               onClick={(e) => {
@@ -106,7 +105,7 @@ export default function App() {
                       e.preventDefault()
                       handleNavigate(item.id)
                     }}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-all duration-200 ${isActive
+                    className={`flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-3 py-1.5 rounded-md text-xs lg:text-sm transition-all duration-200 ${isActive
                       ? 'text-primary bg-primary/10 font-semibold shadow-xs'
                       : 'hover:text-foreground hover:bg-muted/60'
                       }`}
@@ -154,7 +153,7 @@ export default function App() {
             </Button>
           </div>
         </div>
-      </header>
+      </header >
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-10 space-y-10 pb-24 md:pb-12">
         <div id="inicio" className="space-y-2 scroll-mt-20">
@@ -420,6 +419,6 @@ export default function App() {
           })}
         </div>
       </nav>
-    </div>
+    </div >
   );
 }
