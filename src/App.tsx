@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { useTheme } from "@/components/theme-provider"
@@ -27,7 +27,6 @@ import {
   ClipboardList,
   Star,
   LogIn,
-  Sparkles,
   MapPin,
   Clock,
   Send,
@@ -40,6 +39,8 @@ const NAV_ITEMS = [
   { id: 'cotizacion', label: 'Cotizar', icon: ClipboardList, href: '#cotizacion' },
   { id: 'resenas', label: 'Reseñas', icon: Star, href: '#resenas' },
 ]
+
+import { ModuloUsuarios } from "./components/moduloUsuarios"
 
 export default function App() {
   const { theme, setTheme } = useTheme()
@@ -338,7 +339,6 @@ export default function App() {
           </div>
         </section>
 
-        {/* Closed-Loop Reviews Section */}
         <section id="resenas" className="scroll-mt-20 space-y-6 pt-6 border-t border-border">
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
@@ -377,9 +377,9 @@ export default function App() {
             </div>
           </div>
         </section>
+        <ModuloUsuarios />
       </main>
 
-      {/* Mobile Bottom Navigation Bar - Fixed on mobile, hidden on desktop */}
       <nav
         className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-background/95 backdrop-blur-lg border-t border-border shadow-[0_-4px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.4)] transition-colors"
         aria-label="Menú principal inferior móvil"
@@ -402,7 +402,6 @@ export default function App() {
                   }`}
                 aria-label={item.label}
               >
-                {/* Active Indicator Top Accent */}
                 {isActive && (
                   <span className="absolute top-0 w-8 h-0.5 bg-primary rounded-full" />
                 )}
@@ -422,5 +421,5 @@ export default function App() {
         </div>
       </nav>
     </div>
-  )
+  );
 }
