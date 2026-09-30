@@ -1,3 +1,7 @@
+import { useState, useEffect } from 'react'
+import { ResenaForm } from '@/components/resenas/ResenaForm'
+import { ResenasList } from '@/components/resenas/ResenasList'
+
 import {
   Card,
   CardContent,
@@ -11,38 +15,117 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { useTheme } from "@/components/theme-provider"
-import { Sun, Moon, CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react"
+import {
+  Sun,
+  Moon,
+  CheckCircle2,
+  AlertTriangle,
+  AlertCircle,
+  Home,
+  Wrench,
+  Users,
+  ClipboardList,
+  Star,
+  LogIn,
+  Sparkles,
+  MapPin,
+  Clock,
+  Send,
+} from "lucide-react"
+
+const NAV_ITEMS = [
+  { id: 'inicio', label: 'Inicio', icon: Home, href: '#inicio' },
+  { id: 'servicios', label: 'Servicios', icon: Wrench, href: '#servicios' },
+  { id: 'profesionales', label: 'Profesionales', icon: Users, href: '#profesionales' },
+  { id: 'cotizacion', label: 'Cotizar', icon: ClipboardList, href: '#cotizacion' },
+  { id: 'resenas', label: 'Reseñas', icon: Star, href: '#resenas' },
+]
 
 export default function App() {
   const { theme, setTheme } = useTheme()
+  const [refreshResenas, setRefreshResenas] = useState(0)
+  const [activeSection, setActiveSection] = useState('inicio')
+
+  const handleNavigate = (id: string) => {
+    setActiveSection(id)
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 140
+      const sectionIds = ['inicio', 'servicios', 'profesionales', 'cotizacion', 'resenas']
+
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i])
+        if (el && el.offsetTop <= scrollPosition) {
+          setActiveSection(sectionIds[i])
+          break
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="border-b border-border bg-background">
+    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
+      <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-md transition-colors">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <span className="text-base font-semibold tracking-tight text-primary">
-              ExpertoYa!
-            </span>
-            <nav className="flex items-center gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-foreground">
-                Inicio
-              </a>
-              <a href="#" className="hover:text-foreground">
-                Servicios
-              </a>
-              <a href="#" className="hover:text-foreground">
-                Profesionales
-              </a>
+          <div className="flex items-center gap-6 lg:gap-8">
+            <a
+              href="#inicio"
+              onClick={(e) => {
+                e.preventDefault()
+                handleNavigate('inicio')
+              }}
+              className="flex items-center gap-2.5 group cursor-pointer focus:outline-none"
+            >
+              <span className="text-base sm:text-lg font-bold tracking-tight text-primary">
+                ExpertoYa!
+              </span>
+            </a>
+            <nav
+              className="hidden md:flex items-center gap-1 text-sm font-medium text-muted-foreground"
+              aria-label="Navegación principal de escritorio"
+            >
+              {NAV_ITEMS.map((item) => {
+                const Icon = item.icon
+                const isActive = activeSection === item.id
+                return (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      handleNavigate(item.id)
+                    }}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-all duration-200 ${isActive
+                      ? 'text-primary bg-primary/10 font-semibold shadow-xs'
+                      : 'hover:text-foreground hover:bg-muted/60'
+                      }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                  </a>
+                )
+              })}
             </nav>
           </div>
-          <div className="flex items-center gap-3">
+
+          <div className="flex items-center gap-2 sm:gap-3">
             <Button
               variant="outline"
               size="icon"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               title={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
               aria-label="Alternar modo oscuro"
+              className="h-9 w-9 rounded-lg"
             >
               {theme === "dark" ? (
                 <Sun className="h-4 w-4 text-warning" />
@@ -50,88 +133,139 @@ export default function App() {
                 <Moon className="h-4 w-4 text-primary" />
               )}
             </Button>
-            <Button variant="outline" size="sm">
-              Iniciar Sesión
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden sm:inline-flex items-center gap-1.5 font-medium"
+            >
+              <LogIn className="h-3.5 w-3.5" />
+              <span>Iniciar Sesión</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="sm:hidden h-9 w-9"
+              title="Iniciar Sesión"
+              aria-label="Iniciar Sesión"
+            >
+              <LogIn className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-10 space-y-10">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight">
+      <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-10 space-y-10 pb-24 md:pb-12">
+        <div id="inicio" className="space-y-2 scroll-mt-20">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
             Plataforma de Servicios
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Estado base del template con componentes desacoplados de Shadcn/ui.
-          </p>
         </div>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Plomería y Gas</CardTitle>
-              <CardDescription>
-                Martín Benítez • Matrícula Profesional
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground space-y-2">
-              <p>
-                Reparaciones de cañerías, destapes integrales e instalación de
-                artefactos certificados.
+        <section id="servicios" className="scroll-mt-20 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <div>
+              <h2
+                id="profesionales"
+                className="text-xl sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2"
+              >
+                <Wrench className="h-5 w-5 text-primary" /> Servicios y Profesionales
+              </h2>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                Especialistas verificados con matrícula al día y disponibilidad en tu zona.
               </p>
-              <p className="text-xs text-foreground font-medium">
-                Zona: Neuquén Capital y alrededores
-              </p>
-            </CardContent>
-            <CardFooter className="flex justify-between items-center">
-              <span className="text-xs text-muted-foreground">
-                Disponibilidad inmediata
-              </span>
-              <Button variant="outline" size="sm">
-                Ver Perfil
-              </Button>
-            </CardFooter>
-          </Card>
+            </div>
+          </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Electricidad Integral</CardTitle>
-              <CardDescription>
-                Clara Rossi • Técnica Electricista
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground space-y-2">
-              <p>
-                Montaje de tableros trifásicos, cableados domiciliarios y
-                certificaciones de obra.
-              </p>
-              <p className="text-xs text-foreground font-medium">
-                Zona: Cipolletti y Plottier
-              </p>
-            </CardContent>
-            <CardFooter className="flex justify-between items-center">
-              <span className="text-xs text-muted-foreground">
-                Presupuestos sin cargo
-              </span>
-              <Button variant="outline" size="sm">
-                Ver Perfil
-              </Button>
-            </CardFooter>
-          </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <Card className="flex flex-col justify-between hover:border-primary/50 transition-colors shadow-xs">
+              <CardHeader>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <CardTitle className="text-lg font-bold">Plomería y Gas</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
+                      Martín Benítez • Matrícula Profesional
+                    </CardDescription>
+                  </div>
+                  <span className="shrink-0 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-secondary/15 text-secondary-foreground dark:text-secondary border border-secondary/25">
+                    Matriculado
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground space-y-2.5">
+                <p>
+                  Reparaciones de cañerías, destapes integrales e instalación de
+                  artefactos certificados.
+                </p>
+                <div className="flex items-center gap-1.5 text-xs text-foreground font-medium">
+                  <MapPin className="h-3.5 w-3.5 text-primary shrink-0" />
+                  <span>Zona: Neuquén Capital y alrededores</span>
+                </div>
+              </CardContent>
+              <CardFooter className="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between items-stretch sm:items-center pt-2">
+                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5 text-secondary shrink-0" /> Disponibilidad inmediata
+                </span>
+                <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                  Ver Perfil
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card className="flex flex-col justify-between hover:border-primary/50 transition-colors shadow-xs">
+              <CardHeader>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <CardTitle className="text-lg font-bold">Electricidad Integral</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
+                      Clara Rossi • Técnica Electricista
+                    </CardDescription>
+                  </div>
+                  <span className="shrink-0 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-secondary/15 text-secondary-foreground dark:text-secondary border border-secondary/25">
+                    Técnica
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground space-y-2.5">
+                <p>
+                  Montaje de tableros trifásicos, cableados domiciliarios y
+                  certificaciones de obra.
+                </p>
+                <div className="flex items-center gap-1.5 text-xs text-foreground font-medium">
+                  <MapPin className="h-3.5 w-3.5 text-primary shrink-0" />
+                  <span>Zona: Cipolletti y Plottier</span>
+                </div>
+              </CardContent>
+              <CardFooter className="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between items-stretch sm:items-center pt-2">
+                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5 text-secondary shrink-0" /> Presupuestos sin cargo
+                </span>
+                <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                  Ver Perfil
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
         </section>
 
-        <section>
-          <Card>
+        <section id="cotizacion" className="scroll-mt-20">
+          <Card className="shadow-xs">
             <CardHeader>
-              <CardTitle>Solicitud de Cotización</CardTitle>
-              <CardDescription>
-                Formulario estándar para coordinar una visita técnica.
-              </CardDescription>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                  <ClipboardList className="h-5 w-5" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg sm:text-xl font-bold">Solicitud de Cotización</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">
+                    Formulario estándar para coordinar una visita técnica sin costo de presupuesto.
+                  </CardDescription>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              <form className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="nombre">Nombre completo</Label>
                     <Input id="nombre" placeholder="Ej: Juan Pérez" />
@@ -150,9 +284,10 @@ export default function App() {
                   />
                 </div>
 
-                <div className="pt-2">
-                  <Button type="button">
-                    Enviar Solicitud
+                <div className="pt-2 flex flex-col sm:flex-row sm:justify-start">
+                  <Button type="button" className="w-full sm:w-auto flex items-center justify-center gap-2 font-medium">
+                    <Send className="h-4 w-4" />
+                    <span>Enviar Solicitud</span>
                   </Button>
                 </div>
               </form>
@@ -160,43 +295,132 @@ export default function App() {
           </Card>
         </section>
 
-        <section className="space-y-4">
+        <section id="estados" className="scroll-mt-20 space-y-4">
           <div className="space-y-1">
-            <h2 className="text-xl font-bold tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
               Estados del Sistema
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Demostración visual de alertas de estado utilizando los tokens semánticos oficiales de ExpertoYa! en modo claro y oscuro.
             </p>
           </div>
 
           <div className="space-y-3">
             <Alert variant="success">
-              <CheckCircle2 className="h-4 w-4" />
-              <AlertTitle>Operación Exitosa</AlertTitle>
-              <AlertDescription>
-                Tu solicitud de cotización ha sido confirmada con éxito. El profesional matriculado se contactará a la brevedad.
-              </AlertDescription>
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
+              <div>
+                <AlertTitle>Operación Exitosa</AlertTitle>
+                <AlertDescription>
+                  Tu solicitud de cotización ha sido confirmada con éxito. El profesional matriculado se contactará a la brevedad.
+                </AlertDescription>
+              </div>
             </Alert>
 
             <Alert variant="warning">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Alta Demanda en la Zona</AlertTitle>
-              <AlertDescription>
-                Atención: Alta concurrencia de pedidos en este rubro. El tiempo estimado de respuesta puede demorar hasta 24 horas hábiles.
-              </AlertDescription>
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              <div>
+                <AlertTitle>Alta Demanda en la Zona</AlertTitle>
+                <AlertDescription>
+                  Atención: Alta concurrencia de pedidos en este rubro. El tiempo estimado de respuesta puede demorar hasta 24 horas hábiles.
+                </AlertDescription>
+              </div>
             </Alert>
 
             <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error en la Validación</AlertTitle>
-              <AlertDescription>
-                No se pudo procesar la solicitud. Por favor verifica que los campos obligatorios del formulario estén completos y vuelve a intentar.
-              </AlertDescription>
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <div>
+                <AlertTitle>Error en la Validación</AlertTitle>
+                <AlertDescription>
+                  No se pudo procesar la solicitud. Por favor verifica que los campos obligatorios del formulario estén completos y vuelve a intentar.
+                </AlertDescription>
+              </div>
             </Alert>
           </div>
         </section>
+
+        {/* Closed-Loop Reviews Section */}
+        <section id="resenas" className="scroll-mt-20 space-y-6 pt-6 border-t border-border">
+          <div className="space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/20 text-primary uppercase tracking-wider">
+                Módulo Closed-Loop
+              </span>
+              <span className="text-xs text-muted-foreground">TP Universitario • ExpertoYa</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+              <Star className="h-5 w-5 text-primary" />
+              Evaluación y Calificaciones de Profesionales
+            </h2>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Permite a los clientes evaluar de manera contenida la calidad del servicio una vez finalizada la solicitud de trabajo.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+            <div className="lg:col-span-5">
+              <ResenaForm
+                solicitudId={1}
+                clienteId={1}
+                profesionalId="16311898-ac60-4a3e-a843-d4d00fdc89f9"
+                profesionalNombre="Daniela Oñatibia"
+                servicioNombre="Reparación de pérdida de agua en cocina"
+                onResenaCreada={() => setRefreshResenas(prev => prev + 1)}
+              />
+            </div>
+
+            <div className="lg:col-span-7">
+              <ResenasList
+                profesionalId="16311898-ac60-4a3e-a843-d4d00fdc89f9"
+                profesionalNombre="Daniela Oñatibia"
+                actualizarTrigger={refreshResenas}
+              />
+            </div>
+          </div>
+        </section>
       </main>
+
+      {/* Mobile Bottom Navigation Bar - Fixed on mobile, hidden on desktop */}
+      <nav
+        className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-background/95 backdrop-blur-lg border-t border-border shadow-[0_-4px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.4)] transition-colors"
+        aria-label="Menú principal inferior móvil"
+      >
+        <div className="grid grid-cols-5 h-16 max-w-lg mx-auto px-1 items-center">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon
+            const isActive = activeSection === item.id
+            return (
+              <a
+                key={item.id}
+                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleNavigate(item.id)
+                }}
+                className={`flex flex-col items-center justify-center gap-0.5 py-1.5 transition-all duration-200 relative select-none rounded-lg ${isActive
+                  ? 'text-primary font-semibold'
+                  : 'text-muted-foreground hover:text-foreground active:scale-95'
+                  }`}
+                aria-label={item.label}
+              >
+                {/* Active Indicator Top Accent */}
+                {isActive && (
+                  <span className="absolute top-0 w-8 h-0.5 bg-primary rounded-full" />
+                )}
+
+                <div
+                  className={`flex items-center justify-center w-7 h-7 rounded-full transition-all duration-200 ${isActive ? 'bg-primary/15 scale-110' : ''
+                    }`}
+                >
+                  <Icon className="h-4 w-4" />
+                </div>
+                <span className="text-[10px] leading-tight tracking-tight text-center truncate max-w-full px-0.5">
+                  {item.label}
+                </span>
+              </a>
+            )
+          })}
+        </div>
+      </nav>
     </div>
   )
 }
