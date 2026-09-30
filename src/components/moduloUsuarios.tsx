@@ -25,24 +25,24 @@ interface PerfilUsuario {
 export function ModuloUsuarios() {
     const [perfiles, setPerfiles] = useState<PerfilUsuario[]>([
         {
-        id: 1,
-        nombreCompleto: "Martín Benítez",
-        email: "martin.benitez@expertoya.com",
-        rol: "profesional",
-        oficio: "Plomería y Gas",
-        zona: "Neuquén Capital y alrededores",
-        matricula: "MAT-8842-NQN",
-        hashSimulado: "$2a$10$X8k9...7fE2",
+            id: 1,
+            nombreCompleto: "Martín Benítez",
+            email: "martin.benitez@expertoya.com",
+            rol: "profesional",
+            oficio: "Plomería y Gas",
+            zona: "Neuquén Capital y alrededores",
+            matricula: "MAT-8842-NQN",
+            hashSimulado: "$2a$10$X8k9...7fE2",
         },
         {
-        id: 2,
-        nombreCompleto: "Clara Rossi",
-        email: "clara.rossi@expertoya.com",
-        rol: "profesional",
-        oficio: "Electricidad Integral",
-        zona: "Cipolletti y Plottier",
-        matricula: "MAT-5190-RN",
-        hashSimulado: "$2a$10$Q9m1...3aB8",
+            id: 2,
+            nombreCompleto: "Clara Rossi",
+            email: "clara.rossi@expertoya.com",
+            rol: "profesional",
+            oficio: "Electricidad Integral",
+            zona: "Cipolletti y Plottier",
+            matricula: "MAT-5190-RN",
+            hashSimulado: "$2a$10$Q9m1...3aB8",
         },
     ]);
 
@@ -63,24 +63,24 @@ export function ModuloUsuarios() {
         const hashGenerado = `$2a$10$${btoa(password).slice(0, 12)}...`;
 
         const nuevoPerfil: PerfilUsuario = {
-        id: perfiles.length + 1,
-        nombreCompleto,
-        email,
-        rol,
-        oficio:
-            rol === "profesional" ? oficio || "Técnico Matriculado" : undefined,
-        zona: zona || "Neuquén Capital y alrededores",
-        matricula:
-            rol === "profesional"
-            ? `MAT-${Math.floor(1000 + Math.random() * 9000)}-NQN`
-            : undefined,
-        hashSimulado: hashGenerado,
+            id: perfiles.length + 1,
+            nombreCompleto,
+            email,
+            rol,
+            oficio:
+                rol === "profesional" ? oficio || "Técnico Matriculado" : undefined,
+            zona: zona || "Neuquén Capital y alrededores",
+            matricula:
+                rol === "profesional"
+                    ? `MAT-${Math.floor(1000 + Math.random() * 9000)}-NQN`
+                    : undefined,
+            hashSimulado: hashGenerado,
         };
 
         setPerfiles([...perfiles, nuevoPerfil]);
         setPerfilSeleccionado(nuevoPerfil);
         setMensajeExito(
-        `¡Usuario ${nombreCompleto} registrado con éxito! Contraseña protegida con Bcrypt.`,
+            `¡Usuario ${nombreCompleto} registrado con éxito! Contraseña protegida con Bcrypt.`,
         );
         setNombreCompleto("");
         setEmail("");
@@ -92,163 +92,163 @@ export function ModuloUsuarios() {
     return (
         <section className="space-y-6 mt-8">
             <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight">
-                Módulo de Gestión de Usuarios y Perfiles
-            </h2>
-            <p className="text-sm text-muted-foreground">
-                Registro autónomo de clientes-profesionales y
-                consulta de perfiles.
-            </p>
+                <h2 className="text-2xl font-bold tracking-tight">
+                    Módulo de Gestión de Usuarios y Perfiles
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                    Registro autónomo de clientes-profesionales y
+                    consulta de perfiles.
+                </p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-            {/* Formulario de Registro (POST /api/usuarios/registro) */}
-            <Card>
-                <CardHeader>
-                <CardTitle>Regístrate aquí</CardTitle>
-                <CardDescription>Registro para clientes o profesionales</CardDescription>
-                </CardHeader>
-                <form onSubmit={manejarRegistro}>
-                <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                    <Label htmlFor="nombreUsuario">Nombre completo</Label>
-                    <Input
-                        id="nombreUsuario"
-                        placeholder="Ej: Juan Perez"
-                        value={nombreCompleto}
-                        onChange={(e) => setNombreCompleto(e.target.value)}
-                        required
-                    />
-                    </div>
+                {/* Formulario de Registro (POST /api/usuarios/registro) */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Regístrate aquí</CardTitle>
+                        <CardDescription>Registro para clientes o profesionales</CardDescription>
+                    </CardHeader>
+                    <form onSubmit={manejarRegistro}>
+                        <CardContent className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="nombreUsuario">Nombre completo</Label>
+                                <Input
+                                    id="nombreUsuario"
+                                    placeholder="Ej: Juan Perez"
+                                    value={nombreCompleto}
+                                    onChange={(e) => setNombreCompleto(e.target.value)}
+                                    required
+                                />
+                            </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="emailUsuario">Correo electrónico</Label>
-                        <Input
-                        id="emailUsuario"
-                        type="email"
-                        placeholder="usuario@expertoya.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="passUsuario">Contraseña</Label>
-                        <Input
-                        id="passUsuario"
-                        type="password"
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        />
-                    </div>
-                    </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="emailUsuario">Correo electrónico</Label>
+                                    <Input
+                                        id="emailUsuario"
+                                        type="email"
+                                        placeholder="usuario@expertoya.com"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="passUsuario">Contraseña</Label>
+                                    <Input
+                                        id="passUsuario"
+                                        type="password"
+                                        placeholder="••••••••"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="rolUsuario">Rol en la plataforma</Label>
-                        <select
-                        id="rolUsuario"
-                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
-                        value={rol}
-                        onChange={(e) =>
-                            setRol(e.target.value as "cliente" | "profesional")
-                        }
-                        >
-                        <option value="profesional">Profesional</option>
-                        <option value="cliente">Cliente</option>
-                        </select>
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="zonaUsuario">Zona de cobertura</Label>
-                        <Input
-                        id="zonaUsuario"
-                        placeholder="Ej: Neuquén / Cipolletti"
-                        value={zona}
-                        onChange={(e) => setZona(e.target.value)}
-                        />
-                    </div>
-                    </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="rolUsuario">Rol en la plataforma</Label>
+                                    <select
+                                        id="rolUsuario"
+                                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+                                        value={rol}
+                                        onChange={(e) =>
+                                            setRol(e.target.value as "cliente" | "profesional")
+                                        }
+                                    >
+                                        <option value="profesional">Profesional</option>
+                                        <option value="cliente">Cliente</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="zonaUsuario">Zona de cobertura</Label>
+                                    <Input
+                                        id="zonaUsuario"
+                                        placeholder="Ej: Neuquén / Cipolletti"
+                                        value={zona}
+                                        onChange={(e) => setZona(e.target.value)}
+                                    />
+                                </div>
+                            </div>
 
-                    {rol === "profesional" && (
-                    <div className="space-y-2">
-                        <Label htmlFor="oficioUsuario">Oficio o Especialidad</Label>
-                        <Input
-                        id="oficioUsuario"
-                        placeholder="Ej: Gasista Matriculado"
-                        value={oficio}
-                        onChange={(e) => setOficio(e.target.value)}
-                        />
-                    </div>
-                    )}
+                            {rol === "profesional" && (
+                                <div className="space-y-2">
+                                    <Label htmlFor="oficioUsuario">Oficio o Especialidad</Label>
+                                    <Input
+                                        id="oficioUsuario"
+                                        placeholder="Ej: Gasista Matriculado"
+                                        value={oficio}
+                                        onChange={(e) => setOficio(e.target.value)}
+                                    />
+                                </div>
+                            )}
 
-                    {mensajeExito && (
-                    <p className="text-xs font-medium text-green-700 bg-green-50 p-2.5 rounded border border-green-200">
-                        {mensajeExito}
-                    </p>
-                    )}
-                </CardContent>
-                <CardFooter>
-                    <Button type="submit" className="w-full">
-                    Registrar Usuario
-                    </Button>
-                </CardFooter>
-                </form>
-            </Card>
+                            {mensajeExito && (
+                                <p className="text-xs font-medium text-green-700 bg-green-50 p-2.5 rounded border border-green-200">
+                                    {mensajeExito}
+                                </p>
+                            )}
+                        </CardContent>
+                        <CardFooter>
+                            <Button type="submit" className="w-full">
+                                Registrar Usuario
+                            </Button>
+                        </CardFooter>
+                    </form>
+                </Card>
 
-            {/* Visor de Perfil por ID (GET /api/usuarios/:id) */}
-            <Card className="flex flex-col justify-between">
-                <CardHeader>
-                <CardTitle>Ficha de Perfil Público</CardTitle>
-                <CardDescription> Vista de Perfil </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                <div className="flex flex-wrap gap-2">
-                    {perfiles.map((p) => (
-                    <Button
-                        key={p.id}
-                        variant={
-                        perfilSeleccionado?.id === p.id ? "default" : "outline"
-                        }
-                        size="sm"
-                        onClick={() => setPerfilSeleccionado(p)}
-                    >
-                        ID #{p.id}: {p.nombreCompleto}
-                    </Button>
-                    ))}
-                </div>
+                {/* Visor de Perfil por ID (GET /api/usuarios/:id) */}
+                <Card className="flex flex-col justify-between">
+                    <CardHeader>
+                        <CardTitle>Ficha de Perfil Público</CardTitle>
+                        <CardDescription> Vista de Perfil </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="flex flex-wrap gap-2">
+                            {perfiles.map((p) => (
+                                <Button
+                                    key={p.id}
+                                    variant={
+                                        perfilSeleccionado?.id === p.id ? "default" : "outline"
+                                    }
+                                    size="sm"
+                                    onClick={() => setPerfilSeleccionado(p)}
+                                >
+                                    ID #{p.id}: {p.nombreCompleto}
+                                </Button>
+                            ))}
+                        </div>
 
-                {perfilSeleccionado && (
-                    <div className="rounded-lg border p-4 space-y-2 bg-muted/30">
-                    <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-lg">
-                        {perfilSeleccionado.nombreCompleto}
-                        </h3>
-                        <span className="text-xs uppercase px-2 py-0.5 rounded bg-primary/10 font-medium">
-                        {perfilSeleccionado.rol}
-                        </span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                        {perfilSeleccionado.email}
-                    </p>
-                    {perfilSeleccionado.oficio && (
-                        <p className="text-sm">
-                        <strong>Especialidad:</strong> {perfilSeleccionado.oficio}{" "}
-                        ({perfilSeleccionado.matricula})
-                        </p>
-                    )}
-                    <p className="text-sm">
-                        <strong>Zona:</strong> {perfilSeleccionado.zona}
-                    </p>
-                    </div>
-                )}
-                </CardContent>
-                <CardFooter className="text-xs text-muted-foreground">
-                </CardFooter>
-            </Card>
+                        {perfilSeleccionado && (
+                            <div className="rounded-lg border p-4 space-y-2 bg-muted/30">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="font-semibold text-lg">
+                                        {perfilSeleccionado.nombreCompleto}
+                                    </h3>
+                                    <span className="text-xs uppercase px-2 py-0.5 rounded bg-primary/10 font-medium">
+                                        {perfilSeleccionado.rol}
+                                    </span>
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                    {perfilSeleccionado.email}
+                                </p>
+                                {perfilSeleccionado.oficio && (
+                                    <p className="text-sm">
+                                        <strong>Especialidad:</strong> {perfilSeleccionado.oficio}{" "}
+                                        ({perfilSeleccionado.matricula})
+                                    </p>
+                                )}
+                                <p className="text-sm">
+                                    <strong>Zona:</strong> {perfilSeleccionado.zona}
+                                </p>
+                            </div>
+                        )}
+                    </CardContent>
+                    <CardFooter className="text-xs text-muted-foreground">
+                    </CardFooter>
+                </Card>
             </div>
         </section>
-        );
+    );
 }
