@@ -126,5 +126,5 @@ npm run build
 
 ## 📊 Tablero de Trabajo (Kanban)
 
-El progreso, la asignación de tareas por integrante y el seguimiento de _user stories_ se gestionan en tiempo real en nuestro tablero colaborativo:
-🔗 **[GitHub Projects - Tablero Grupo 1 NoCode](https://github.com/users/DevEriik/projects/4/views/1)**
+El progreso y la asignación de _issues_ de este TP se puede seguir en tiempo real en nuestro tablero colaborativo:
+🔗 **[https://github.com/users/DevEriik/projects/4/views/1]**
