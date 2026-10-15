@@ -31,7 +31,7 @@ sequenceDiagram
   WSFE-->>ERP: 5. FECAESolicitarResult(CAE, Vto / Errores)
 ```
 
-# 4. Cuadro de análisis técnico
+## 4. Cuadro de análisis técnico
 
 | Elemento Punto 1       | Identificado en AFIP                                                                                   | Valor / Ejemplo real                                                                                                                                                                                                                                   | Justificación                                                                                                       |
 | ---------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
@@ -44,10 +44,11 @@ sequenceDiagram
 | **Seguridad**          | WS-Security + X.509 + HTTPS                                                                            | 1. Certificado digital de clave fiscal 2. CMS firmado para `LoginCms` 3. Ticket `service=wsfe` 12hs 4. HTTPS                                                                                                                                           | Exige no repudio e integridad fiscal. Muy superior a API-key simple de REST.                                        |
 | **UDDI**               | Sin UDDI público                                                                                       | Endpoint se obtiene por documentación oficial, no por directorio UDDI                                                                                                                                                                                  | Confirma teoría: UDDI cayó en desuso, se reemplaza por docs/portales. Se justifica su ausencia.                     |
 
-# 5. Ejemplo simple de mensaje SOAP
+## 5. Ejemplo simple de mensaje SOAP
 
 <!-- Request FECAESolicitar -->
 
+```xml
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 <soap:Body>
 <FECAESolicitar xmlns="http://ar.gov.afip.dif.FEV1/">
@@ -59,8 +60,9 @@ sequenceDiagram
 </FECAESolicitar>
 </soap:Body>
 </soap:Envelope>
+```
 
-# 6. Fuentes consultadas
+## 6. Fuentes consultadas
 
 1. AFIP - Manual Desarrollador WSFEv1 v4.0 (2025) - afip.gob.ar/ws/documentacion/
 2. AFIP - Documentación WSAA: afip.gob.ar/ws/documentacion/wsaa.asp - URLs LoginCms homo/prod.
