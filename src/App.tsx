@@ -5,16 +5,23 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
-import { useTheme } from "@/components/theme-provider"
-import { Sun, Moon, CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react"
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { useTheme } from "@/components/theme-provider";
+import {
+  Sun,
+  Moon,
+  CheckCircle2,
+  AlertTriangle,
+  AlertCircle,
+} from "lucide-react";
+import MapaProfesionales from "@/components/mapa-profesional";
 
 export default function App() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -41,7 +48,11 @@ export default function App() {
               variant="outline"
               size="icon"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              title={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+              title={
+                theme === "dark"
+                  ? "Cambiar a modo claro"
+                  : "Cambiar a modo oscuro"
+              }
               aria-label="Alternar modo oscuro"
             >
               {theme === "dark" ? (
@@ -62,6 +73,10 @@ export default function App() {
           <h1 className="text-2xl font-bold tracking-tight">
             Plataforma de Servicios
           </h1>
+
+          <section>
+            <MapaProfesionales />
+          </section>
           <p className="text-sm text-muted-foreground">
             Estado base del template con componentes desacoplados de Shadcn/ui.
           </p>
@@ -151,9 +166,7 @@ export default function App() {
                 </div>
 
                 <div className="pt-2">
-                  <Button type="button">
-                    Enviar Solicitud
-                  </Button>
+                  <Button type="button">Enviar Solicitud</Button>
                 </div>
               </form>
             </CardContent>
@@ -166,7 +179,8 @@ export default function App() {
               Estados del Sistema
             </h2>
             <p className="text-sm text-muted-foreground">
-              Demostración visual de alertas de estado utilizando los tokens semánticos oficiales de ExpertoYa! en modo claro y oscuro.
+              Demostración visual de alertas de estado utilizando los tokens
+              semánticos oficiales de ExpertoYa! en modo claro y oscuro.
             </p>
           </div>
 
@@ -175,7 +189,8 @@ export default function App() {
               <CheckCircle2 className="h-4 w-4" />
               <AlertTitle>Operación Exitosa</AlertTitle>
               <AlertDescription>
-                Tu solicitud de cotización ha sido confirmada con éxito. El profesional matriculado se contactará a la brevedad.
+                Tu solicitud de cotización ha sido confirmada con éxito. El
+                profesional matriculado se contactará a la brevedad.
               </AlertDescription>
             </Alert>
 
@@ -183,7 +198,8 @@ export default function App() {
               <AlertTriangle className="h-4 w-4" />
               <AlertTitle>Alta Demanda en la Zona</AlertTitle>
               <AlertDescription>
-                Atención: Alta concurrencia de pedidos en este rubro. El tiempo estimado de respuesta puede demorar hasta 24 horas hábiles.
+                Atención: Alta concurrencia de pedidos en este rubro. El tiempo
+                estimado de respuesta puede demorar hasta 24 horas hábiles.
               </AlertDescription>
             </Alert>
 
@@ -191,12 +207,14 @@ export default function App() {
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Error en la Validación</AlertTitle>
               <AlertDescription>
-                No se pudo procesar la solicitud. Por favor verifica que los campos obligatorios del formulario estén completos y vuelve a intentar.
+                No se pudo procesar la solicitud. Por favor verifica que los
+                campos obligatorios del formulario estén completos y vuelve a
+                intentar.
               </AlertDescription>
             </Alert>
           </div>
         </section>
       </main>
     </div>
-  )
+  );
 }
