@@ -1,0 +1,80 @@
+## 5. Comparación entre SOAP y REST
+
+### 5.1. Diferencia fundamental
+
+* **SOAP:** Es un **protocolo de comunicación** formal y estricto, centrado en operaciones (*Remote Procedure Calls* / RPC) y mensajes XML fuertemente tipados.
+* **REST:** Es un **estilo arquitectónico** centrado en **recursos** identificados por URIs, que aprovecha las operaciones nativas del protocolo HTTP (GET, POST, PUT, DELETE) con una interfaz uniforme y sin estado (*stateless*).
+
+### 5.2. Estándares de lenguajes utilizados
+
+* **SOAP:** Emplea **XML** obligatorio para sus mensajes, **XSD** para definir tipos y validar estructuras, y **WSDL** como contrato descriptivo formal.
+* **REST:** No impone un formato único. Utiliza predominantemente **JSON**, aunque soporta XML, texto plano, HTML, etc. Sus contratos se documentan típicamente mediante **OpenAPI** (Swagger) y esquemas JSON Schema.
+
+### 5.3. ¿Por qué se dice que REST es más liviano?
+
+Se considera más liviano por las siguientes razones:
+
+1. **Menor sobrecarga (*overhead*):** JSON tiene una sintaxis más concisa y menor tamaño en bytes que la envoltura XML con namespaces de SOAP.
+2. **Aprovechamiento nativo de HTTP:** Emplea los verbos y códigos de estado nativos (200, 404, 500) en lugar de encapsular fallas en un payload XML `Fault`.
+3. **Uso eficiente de caché:** Las peticiones `GET` aprovechan cabeceras HTTP como `Cache-Control` y `ETag` para almacenar respuestas en navegadores o CDNs.
+4. **Simplicidad de consumo:** Un cliente web (ej. fetch/Axios en React) o móvil procesa JSON sin necesidad de herramientas pesadas para deserializar WSDL/XML.
+
+#### Ejemplo comparativo de consulta en ExpertoYa
+
+**Solicitud REST:**
+```http
+GET /profesionales/1042 HTTP/1.1
+Host: api.expertoya.example
+Accept: application/json
+```
+
+**Respuesta REST:**
+```json
+{
+  "idProfesional": 1042,
+  "nombre": "Carlos Méndez",
+  "oficio": "Plomero",
+  "matriculaVerificada": true,
+  "calificacionPromedio": 4.8
+}
+```
+
+*Frente al mensaje SOAP visto en la sección 2.4, la versión REST elimina la sobrecarga de envolturas XML y namespaces.*
+
+### 5.4. Tabla comparativa de estándares
+
+|  specto                            |                  SOAP                     |                   REST                           |
+| :-----------------------------     | :-----------------------------------------| :----------------------------------------------- |
+| **Naturaleza**                     | Protocolo de comunicación                 | Estilo arquitectónico                            |
+| **Formato de mensajes**            | XML obligatorio                           | Predominantemente JSON (admite XML, texto, etc.) |
+| **Definición de datos**            | XML Schema (XSD)                          | JSON Schema, entre otros                         |
+| **Descripción del servicio**       | WSDL                                      | OpenAPI (Swagger)                                |
+| **Transporte**                     | HTTP/HTTPS, SMTP, JMS                     | Principalmente HTTP/HTTPS                        |
+| **Registro y descubrimiento**      | UDDI (en desuso práctico)                 | Catálogos de API, portales para desarrolladores  |
+| **Seguridad del mensaje**          | WS-Security, XML Signature, XML Encryption| Depende de la aplicación (JWT, JWE, JWS)         |
+| **Seguridad de transporte**        | TLS mediante HTTPS                        | TLS mediante HTTPS                               |
+| **Autenticación y autorización**   | WS-Security, Tokens SAML, Certificados    | OAuth 2.0, OpenID Connect, JWT, API Keys         |
+| **Manejo de errores**              | Mensajes `SOAP Fault`                     | Códigos de estado HTTP y respuestas JSON         |
+| **Caché**                          | Compleja y poco directa                   | Nativa y directa mediante cabeceras HTTP         |
+
+### 5.5. Otras características comparadas
+
+| Característica                | SOAP                                                    |                   REST                       |
+| :---------------------------- | :-----------------------------------------------------  |---------------------------------------------
+| **Modelo de interacción**     | Centrado en operaciones y mensajes                      | Centrado en recursos identificados por URI   |
+| **Contrato formal**           | WSDL habitual y rígido                                  | OpenAPI habitual pero opcional               |
+| **Manejo de estado**          | Admite estándares con estado o transacciones            | Estrictamente sin estado (*stateless*)       |
+| **Complejidad**               | Alta (configuraciones WS-*)                             | Baja a moderada                              |
+| **Interoperabilidad**         | Basada en especificaciones estrictas                    | Basada en estándares web universales         |
+| **Transacciones distribuidas**| WS-AtomicTransaction                                    | Patrones de aplicación (ej. Saga, compensaciones) |
+| **Casos de uso típicos**      | Banca, pasarelas de pago heredadas, entornos enterprise | Aplicaciones web (React/Vue), móviles, microservicios |
+
+### 5.6. ¿Cuál conviene utilizar en ExpertoYa?
+
+Para la plataforma **ExpertoYa**, la elección principal recomendada es **REST con JSON**:
+* Se integra de forma limpia y directa con la interfaz de usuario en **React**.
+* Reduce el consumo de datos en aplicaciones web y móviles.
+* Facilita el desarrollo, documentación con OpenAPI y pruebas automatizadas.
+
+**SOAP** se mantendría únicamente como una alternativa secundaria de integración B2B en caso de que entidades gubernamentales, colegios de profesionales o sistemas bancarios legados requieran contratos WSDL o especificaciones WS-* obligatorias.
+
