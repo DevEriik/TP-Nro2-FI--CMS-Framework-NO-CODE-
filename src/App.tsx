@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react'
-import { ResenaForm } from '@/components/resenas/ResenaForm'
-import { ResenasList } from '@/components/resenas/ResenasList'
-import { useTheme } from "@/components/theme-provider"
-import { ModuloUsuarios } from "./components/moduloUsuarios"
-
+import { useState, useEffect } from "react";
+import { ResenaForm } from "@/components/resenas/ResenaForm";
+import { ResenasList } from "@/components/resenas/ResenasList";
+import { useTheme } from "@/components/theme-provider";
+import { ModuloUsuarios } from "./components/moduloUsuarios";
 import {
   Card,
   CardContent,
@@ -11,11 +10,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label"
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
+import { Label } from "@/components/ui/label";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import {
   Sun,
   Moon,
@@ -31,47 +30,62 @@ import {
   MapPin,
   Clock,
   Send,
-} from "lucide-react"
+} from "lucide-react";
+import MapaProfesionales from "@/components/mapa-profesional";
 
 const NAV_ITEMS = [
-  { id: 'inicio', label: 'Inicio', icon: Home, href: '#inicio' },
-  { id: 'servicios', label: 'Servicios', icon: Wrench, href: '#servicios' },
-  { id: 'profesionales', label: 'Profesionales', icon: Users, href: '#profesionales' },
-  { id: 'cotizacion', label: 'Cotizar', icon: ClipboardList, href: '#cotizacion' },
-  { id: 'resenas', label: 'Reseñas', icon: Star, href: '#resenas' },
-]
+  { id: "inicio", label: "Inicio", icon: Home, href: "#inicio" },
+  { id: "servicios", label: "Servicios", icon: Wrench, href: "#servicios" },
+  {
+    id: "profesionales",
+    label: "Profesionales",
+    icon: Users,
+    href: "#profesionales",
+  },
+  {
+    id: "cotizacion",
+    label: "Cotizar",
+    icon: ClipboardList,
+    href: "#cotizacion",
+  },
+  { id: "resenas", label: "Reseñas", icon: Star, href: "#resenas" },
+];
 
 export default function App() {
-  const { theme, setTheme } = useTheme()
-  const [refreshResenas, setRefreshResenas] = useState(0)
-  const [activeSection, setActiveSection] = useState('inicio')
+  const { theme, setTheme } = useTheme();
+  const [refreshResenas, setRefreshResenas] = useState(0);
+  const [activeSection, setActiveSection] = useState("inicio");
 
   const handleNavigate = (id: string) => {
-    setActiveSection(id)
-    const element = document.getElementById(id)
+    setActiveSection(id);
+    const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 140
-      const sectionIds = ['inicio', 'servicios', 'profesionales', 'cotizacion', 'resenas']
-
+      const scrollPosition = window.scrollY + 140;
+      const sectionIds = [
+        "inicio",
+        "servicios",
+        "profesionales",
+        "cotizacion",
+        "resenas",
+      ];
       for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i])
+        const el = document.getElementById(sectionIds[i]);
         if (el && el.offsetTop <= scrollPosition) {
-          setActiveSection(sectionIds[i])
-          break
+          setActiveSection(sectionIds[i]);
+          break;
         }
       }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
@@ -81,8 +95,8 @@ export default function App() {
             <a
               href="#inicio"
               onClick={(e) => {
-                e.preventDefault()
-                handleNavigate('inicio')
+                e.preventDefault();
+                handleNavigate("inicio");
               }}
               className="flex items-center gap-2.5 group cursor-pointer focus:outline-none"
             >
@@ -95,35 +109,35 @@ export default function App() {
               aria-label="Navegación principal de escritorio"
             >
               {NAV_ITEMS.map((item) => {
-                const Icon = item.icon
-                const isActive = activeSection === item.id
+                const Icon = item.icon;
+                const isActive = activeSection === item.id;
                 return (
                   <a
                     key={item.id}
                     href={item.href}
                     onClick={(e) => {
-                      e.preventDefault()
-                      handleNavigate(item.id)
+                      e.preventDefault();
+                      handleNavigate(item.id);
                     }}
-                    className={`flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-3 py-1.5 rounded-md text-xs lg:text-sm transition-all duration-200 ${isActive
-                      ? 'text-primary bg-primary/10 font-semibold shadow-xs'
-                      : 'hover:text-foreground hover:bg-muted/60'
-                      }`}
+                    className={`flex items-center gap-1 lg:gap-1.5 px-1.5 lg:px-3 py-1.5 rounded-md text-xs lg:text-sm transition-all duration-200 ${isActive ? "text-primary bg-primary/10 font-semibold shadow-xs" : "hover:text-foreground hover:bg-muted/60"}`}
                   >
                     <Icon className="h-4 w-4" />
                     <span>{item.label}</span>
                   </a>
-                )
+                );
               })}
             </nav>
           </div>
-
           <div className="flex items-center gap-2 sm:gap-3">
             <Button
               variant="outline"
               size="icon"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              title={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+              title={
+                theme === "dark"
+                  ? "Cambiar a modo claro"
+                  : "Cambiar a modo oscuro"
+              }
               aria-label="Alternar modo oscuro"
               className="h-9 w-9 rounded-lg"
             >
@@ -133,7 +147,6 @@ export default function App() {
                 <Moon className="h-4 w-4 text-primary" />
               )}
             </Button>
-
             <Button
               variant="outline"
               size="sm"
@@ -153,13 +166,19 @@ export default function App() {
             </Button>
           </div>
         </div>
-      </header >
+      </header>
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-10 space-y-10 pb-24 md:pb-12">
         <div id="inicio" className="space-y-2 scroll-mt-20">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
             Plataforma de Servicios
           </h1>
+          <section id="mapa" className="scroll-mt-20">
+            <MapaProfesionales />
+          </section>
+          <p className="text-sm text-muted-foreground">
+            Estado base del template con componentes desacoplados de Shadcn/ui.
+          </p>
         </div>
 
         <section id="servicios" className="scroll-mt-20 space-y-4">
@@ -169,20 +188,23 @@ export default function App() {
                 id="profesionales"
                 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2"
               >
-                <Wrench className="h-5 w-5 text-primary" /> Servicios y Profesionales
+                <Wrench className="h-5 w-5 text-primary" /> Servicios y
+                Profesionales
               </h2>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Especialistas verificados con matrícula al día y disponibilidad en tu zona.
+                Especialistas verificados con matrícula al día y disponibilidad
+                en tu zona.
               </p>
             </div>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <Card className="flex flex-col justify-between hover:border-primary/50 transition-colors shadow-xs">
               <CardHeader>
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <CardTitle className="text-lg font-bold">Plomería y Gas</CardTitle>
+                    <CardTitle className="text-lg font-bold">
+                      Plomería y Gas
+                    </CardTitle>
                     <CardDescription className="text-xs sm:text-sm">
                       Martín Benítez • Matrícula Profesional
                     </CardDescription>
@@ -204,19 +226,25 @@ export default function App() {
               </CardContent>
               <CardFooter className="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between items-stretch sm:items-center pt-2">
                 <span className="text-xs text-muted-foreground flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5 text-secondary shrink-0" /> Disponibilidad inmediata
+                  <Clock className="h-3.5 w-3.5 text-secondary shrink-0" />{" "}
+                  Disponibilidad inmediata
                 </span>
-                <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full sm:w-auto"
+                >
                   Ver Perfil
                 </Button>
               </CardFooter>
             </Card>
-
             <Card className="flex flex-col justify-between hover:border-primary/50 transition-colors shadow-xs">
               <CardHeader>
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <CardTitle className="text-lg font-bold">Electricidad Integral</CardTitle>
+                    <CardTitle className="text-lg font-bold">
+                      Electricidad Integral
+                    </CardTitle>
                     <CardDescription className="text-xs sm:text-sm">
                       Clara Rossi • Técnica Electricista
                     </CardDescription>
@@ -238,9 +266,14 @@ export default function App() {
               </CardContent>
               <CardFooter className="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between items-stretch sm:items-center pt-2">
                 <span className="text-xs text-muted-foreground flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5 text-secondary shrink-0" /> Presupuestos sin cargo
+                  <Clock className="h-3.5 w-3.5 text-secondary shrink-0" />{" "}
+                  Presupuestos sin cargo
                 </span>
-                <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full sm:w-auto"
+                >
                   Ver Perfil
                 </Button>
               </CardFooter>
@@ -256,9 +289,12 @@ export default function App() {
                   <ClipboardList className="h-5 w-5" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg sm:text-xl font-bold">Solicitud de Cotización</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl font-bold">
+                    Solicitud de Cotización
+                  </CardTitle>
                   <CardDescription className="text-xs sm:text-sm">
-                    Formulario estándar para coordinar una visita técnica sin costo de presupuesto.
+                    Formulario estándar para coordinar una visita técnica sin
+                    costo de presupuesto.
                   </CardDescription>
                 </div>
               </div>
@@ -275,7 +311,6 @@ export default function App() {
                     <Input id="servicio" placeholder="Ej: Electricidad" />
                   </div>
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="detalle">Descripción del problema</Label>
                   <Input
@@ -283,9 +318,11 @@ export default function App() {
                     placeholder="Detalla brevemente el trabajo que necesitas cotizar"
                   />
                 </div>
-
                 <div className="pt-2 flex flex-col sm:flex-row sm:justify-start">
-                  <Button type="button" className="w-full sm:w-auto flex items-center justify-center gap-2 font-medium">
+                  <Button
+                    type="button"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 font-medium"
+                  >
                     <Send className="h-4 w-4" />
                     <span>Enviar Solicitud</span>
                   </Button>
@@ -301,60 +338,68 @@ export default function App() {
               Estados del Sistema
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Demostración visual de alertas de estado utilizando los tokens semánticos oficiales de ExpertoYa! en modo claro y oscuro.
+              Demostración visual de alertas de estado utilizando los tokens
+              semánticos oficiales de ExpertoYa! en modo claro y oscuro.
             </p>
           </div>
-
           <div className="space-y-3">
             <Alert variant="success">
               <CheckCircle2 className="h-4 w-4 shrink-0" />
               <div>
                 <AlertTitle>Operación Exitosa</AlertTitle>
                 <AlertDescription>
-                  Tu solicitud de cotización ha sido confirmada con éxito. El profesional matriculado se contactará a la brevedad.
+                  Tu solicitud de cotización ha sido confirmada con éxito. El
+                  profesional matriculado se contactará a la brevedad.
                 </AlertDescription>
               </div>
             </Alert>
-
             <Alert variant="warning">
               <AlertTriangle className="h-4 w-4 shrink-0" />
               <div>
                 <AlertTitle>Alta Demanda en la Zona</AlertTitle>
                 <AlertDescription>
-                  Atención: Alta concurrencia de pedidos en este rubro. El tiempo estimado de respuesta puede demorar hasta 24 horas hábiles.
+                  Atención: Alta concurrencia de pedidos en este rubro. El
+                  tiempo estimado de respuesta puede demorar hasta 24 horas
+                  hábiles.
                 </AlertDescription>
               </div>
             </Alert>
-
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <div>
                 <AlertTitle>Error en la Validación</AlertTitle>
                 <AlertDescription>
-                  No se pudo procesar la solicitud. Por favor verifica que los campos obligatorios del formulario estén completos y vuelve a intentar.
+                  No se pudo procesar la solicitud. Por favor verifica que los
+                  campos obligatorios del formulario estén completos y vuelve a
+                  intentar.
                 </AlertDescription>
               </div>
             </Alert>
           </div>
         </section>
 
-        <section id="resenas" className="scroll-mt-20 space-y-6 pt-6 border-t border-border">
+        <section
+          id="resenas"
+          className="scroll-mt-20 space-y-6 pt-6 border-t border-border"
+        >
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/20 text-primary uppercase tracking-wider">
                 Módulo Closed-Loop
               </span>
-              <span className="text-xs text-muted-foreground">TP Universitario • ExpertoYa</span>
+              <span className="text-xs text-muted-foreground">
+                TP Universitario • ExpertoYa
+              </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
               <Star className="h-5 w-5 text-primary" />
               Evaluación y Calificaciones de Profesionales
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Permite a los clientes evaluar de manera contenida la calidad del servicio una vez finalizada la solicitud de trabajo.
+              Permite a los clientes evaluar de manera contenida la calidad del
+              servicio una vez finalizada la solicitud de trabajo.
             </p>
           </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             <div className="lg:col-span-5">
               <ResenaForm
@@ -363,10 +408,9 @@ export default function App() {
                 profesionalId="16311898-ac60-4a3e-a843-d4d00fdc89f9"
                 profesionalNombre="Daniela Oñatibia"
                 servicioNombre="Reparación de pérdida de agua en cocina"
-                onResenaCreada={() => setRefreshResenas(prev => prev + 1)}
+                onResenaCreada={() => setRefreshResenas((prev) => prev + 1)}
               />
             </div>
-
             <div className="lg:col-span-7">
               <ResenasList
                 profesionalId="16311898-ac60-4a3e-a843-d4d00fdc89f9"
@@ -385,29 +429,24 @@ export default function App() {
       >
         <div className="grid grid-cols-5 h-16 max-w-lg mx-auto px-1 items-center">
           {NAV_ITEMS.map((item) => {
-            const Icon = item.icon
-            const isActive = activeSection === item.id
+            const Icon = item.icon;
+            const isActive = activeSection === item.id;
             return (
               <a
                 key={item.id}
                 href={item.href}
                 onClick={(e) => {
-                  e.preventDefault()
-                  handleNavigate(item.id)
+                  e.preventDefault();
+                  handleNavigate(item.id);
                 }}
-                className={`flex flex-col items-center justify-center gap-0.5 py-1.5 transition-all duration-200 relative select-none rounded-lg ${isActive
-                  ? 'text-primary font-semibold'
-                  : 'text-muted-foreground hover:text-foreground active:scale-95'
-                  }`}
+                className={`flex flex-col items-center justify-center gap-0.5 py-1.5 transition-all duration-200 relative select-none rounded-lg ${isActive ? "text-primary font-semibold" : "text-muted-foreground hover:text-foreground active:scale-95"}`}
                 aria-label={item.label}
               >
                 {isActive && (
                   <span className="absolute top-0 w-8 h-0.5 bg-primary rounded-full" />
                 )}
-
                 <div
-                  className={`flex items-center justify-center w-7 h-7 rounded-full transition-all duration-200 ${isActive ? 'bg-primary/15 scale-110' : ''
-                    }`}
+                  className={`flex items-center justify-center w-7 h-7 rounded-full transition-all duration-200 ${isActive ? "bg-primary/15 scale-110" : ""}`}
                 >
                   <Icon className="h-4 w-4" />
                 </div>
@@ -415,10 +454,10 @@ export default function App() {
                   {item.label}
                 </span>
               </a>
-            )
+            );
           })}
         </div>
       </nav>
-    </div >
+    </div>
   );
 }
