@@ -3,6 +3,7 @@ import { ResenaForm } from "@/components/resenas/ResenaForm";
 import { ResenasList } from "@/components/resenas/ResenasList";
 import { useTheme } from "@/components/theme-provider";
 import { ModuloUsuarios } from "./components/moduloUsuarios";
+import VideoCallRoom, { CallLauncherButton } from "./TP3/VideoCallRoom";
 import {
   Card,
   CardContent,
@@ -55,6 +56,7 @@ export default function App() {
   const { theme, setTheme } = useTheme();
   const [refreshResenas, setRefreshResenas] = useState(0);
   const [activeSection, setActiveSection] = useState("inicio");
+  const [enLlamada, setEnLlamada] = useState(false);
 
   const handleNavigate = (id: string) => {
     setActiveSection(id);
@@ -147,6 +149,10 @@ export default function App() {
                 <Moon className="h-4 w-4 text-primary" />
               )}
             </Button>
+            <CallLauncherButton
+              chatStatus="active"
+              onStartCall={() => setEnLlamada(true)}
+            />
             <Button
               variant="outline"
               size="sm"
@@ -229,13 +235,19 @@ export default function App() {
                   <Clock className="h-3.5 w-3.5 text-secondary shrink-0" />{" "}
                   Disponibilidad inmediata
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full sm:w-auto"
-                >
-                  Ver Perfil
-                </Button>
+                <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                  <CallLauncherButton
+                    chatStatus="active"
+                    onStartCall={() => setEnLlamada(true)}
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full sm:w-auto"
+                  >
+                    Ver Perfil
+                  </Button>
+                </div>
               </CardFooter>
             </Card>
             <Card className="flex flex-col justify-between hover:border-primary/50 transition-colors shadow-xs">
@@ -458,6 +470,25 @@ export default function App() {
           })}
         </div>
       </nav>
+
+      {/* Modal de Videollamada WebRTC (TP3 - ExpertoYa) */}
+      {enLlamada && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
+        >
+          <div className="w-full max-w-4xl max-h-[95vh] flex flex-col relative my-auto">
+            <VideoCallRoom
+              chatStatus="active"
+              roomUrl="https://expertoya.daily.co/diagnostico-demo"
+              userName="Abril (Cliente ExpertoYa)"
+              userRole="cliente"
+              onCloseCall={() => setEnLlamada(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
