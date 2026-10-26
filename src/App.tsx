@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { ResenaForm } from "@/components/resenas/ResenaForm";
 import { ResenasList } from "@/components/resenas/ResenasList";
 import { useTheme } from "@/components/theme-provider";
@@ -88,6 +88,43 @@ export default function App() {
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const [cotizacion, setCotizacion] = useState({
+    nombre: "",
+    servicio: "",
+    detalle: "",
+  });
+  const [enviandoCotizacion, setEnviandoCotizacion] = useState(false);
+  const [estadoCotizacion, setEstadoCotizacion] = useState<
+    "idle" | "ok" | "error"
+  >("idle");
+
+  const handleEnviarCotizacion = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!cotizacion.nombre || !cotizacion.servicio || !cotizacion.detalle) {
+      setEstadoCotizacion("error");
+      return;
+    }
+    setEnviandoCotizacion(true);
+    try {
+      const res = await fetch("http://localhost:3001/api/cotizaciones", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombreCompleto: cotizacion.nombre,
+          oficio: cotizacion.servicio,
+          descripcion: cotizacion.detalle,
+        }),
+      });
+      if (!res.ok) throw new Error("Falló el envío");
+      setEstadoCotizacion("ok");
+      setCotizacion({ nombre: "", servicio: "", detalle: "" });
+    } catch {
+      setEstadoCotizacion("error");
+    } finally {
+      setEnviandoCotizacion(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20 selection:text-primary">
@@ -312,34 +349,86 @@ export default function App() {
               </div>
             </CardHeader>
             <CardContent>
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="nombre">Nombre completo</Label>
-                    <Input id="nombre" placeholder="Ej: Juan Pérez" />
+              <CardContent>
+                <form className="space-y-4" onSubmit={handleEnviarCotizacion}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="nombre">Nombre completo</Label>
+                      <Input
+                        id="nombre"
+                        placeholder="Ej: Juan Pérez"
+                        value={cotizacion.nombre}
+                        onChange={(e) =>
+                          setCotizacion({
+                            ...cotizacion,
+                            nombre: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="servicio">Oficio requerido</Label>
+                      <Input
+                        id="servicio"
+                        placeholder="Ej: Electricidad"
+                        value={cotizacion.servicio}
+                        onChange={(e) =>
+                          setCotizacion({
+                            ...cotizacion,
+                            servicio: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="servicio">Oficio requerido</Label>
-                    <Input id="servicio" placeholder="Ej: Electricidad" />
+                    <Label htmlFor="detalle">Descripción del problema</Label>
+                    <Input
+                      id="detalle"
+                      placeholder="Detalla brevemente el trabajo que necesitas cotizar"
+                      value={cotizacion.detalle}
+                      onChange={(e) =>
+                        setCotizacion({
+                          ...cotizacion,
+                          detalle: e.target.value,
+                        })
+                      }
+                    />
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="detalle">Descripción del problema</Label>
-                  <Input
-                    id="detalle"
-                    placeholder="Detalla brevemente el trabajo que necesitas cotizar"
-                  />
-                </div>
-                <div className="pt-2 flex flex-col sm:flex-row sm:justify-start">
-                  <Button
-                    type="button"
-                    className="w-full sm:w-auto flex items-center justify-center gap-2 font-medium"
-                  >
-                    <Send className="h-4 w-4" />
-                    <span>Enviar Solicitud</span>
-                  </Button>
-                </div>
-              </form>
+                  <div className="pt-2 flex flex-col sm:flex-row sm:justify-start">
+                    <Button
+                      type="submit"
+                      disabled={enviandoCotizacion}
+                      className="w-full sm:w-auto flex items-center justify-center gap-2 font-medium"
+                    >
+                      <Send className="h-4 w-4" />
+                      <span>
+                        {enviandoCotizacion
+                          ? "Enviando..."
+                          : "Enviar Solicitud"}
+                      </span>
+                    </Button>
+                  </div>
+                  {estadoCotizacion === "ok" && (
+                    <Alert variant="success">
+                      <CheckCircle2 className="h-4 w-4 shrink-0" />
+                      <AlertDescription>
+                        Solicitud enviada. El profesional fue notificado por
+                        correo.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  {estadoCotizacion === "error" && (
+                    <Alert variant="destructive">
+                      <AlertCircle className="h-4 w-4 shrink-0" />
+                      <AlertDescription>
+                        No se pudo enviar. Completá todos los campos e intentá
+                        de nuevo.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                </form>
+              </CardContent>
             </CardContent>
           </Card>
         </section>

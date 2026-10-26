@@ -172,7 +172,7 @@ export const ResenasList: React.FC<ResenasListProps> = ({
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="pt-2 text-sm text-foreground/90 p-4 sm:p-6 pt-0">
+              <CardContent className="pt-2 text-sm text-foreground/90 p-4 sm:p-6">
                 <p className="italic font-light">"{resena.comentario}"</p>
                 <div className="mt-3 flex items-center gap-1 text-[11px] text-muted-foreground">
                   <Calendar className="h-3 w-3" />
