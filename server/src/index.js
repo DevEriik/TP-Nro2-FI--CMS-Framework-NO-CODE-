@@ -4,6 +4,13 @@ import dotenv from "dotenv";
 import reseniaRoutes from "./routes/resenia.routes.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import notificationRoutes from "./routes/notificationRoutes.js";
+import resend from "./config/mailer.js";
+import {
+  notificarBienvenida,
+  notificarNuevaCotizacion,
+  notificarNuevaResena,
+} from "./services/notificaciones.js"; 
 
 dotenv.config();
 
@@ -13,7 +20,12 @@ const PORT = process.env.PORT || 3001;
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://localhost:5174", 
+      "http://127.0.0.1:5174", 
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
@@ -77,6 +89,8 @@ const usuariosDB = [
 
 app.post("/api/usuarios/registro", async (req, res) => {
   try {
+    console.log("📩 Registro recibido:", req.body.email);
+
     const { nombreCompleto, email, password, rol, oficio, zona } = req.body;
     if (!nombreCompleto || !email || !password || !rol)
       return res.status(400).json({ error: "Faltan campos." });
@@ -90,8 +104,14 @@ app.post("/api/usuarios/registro", async (req, res) => {
       rol,
     };
     usuariosDB.push(nuevoUsuario);
+
+    notificarBienvenida({ email, nombreCompleto, rol, oficio, zona }).catch(
+      (e) => console.error("Error enviando bienvenida:", e),
+    );
+
     return res.status(201).json({ mensaje: "Usuario registrado." });
   } catch (error) {
+    console.error("🚨 ERROR EN EL BACKEND:", error);
     return res.status(500).json({ error: "Error interno." });
   }
 });
@@ -108,6 +128,52 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/resenas", reseniaRoutes);
+
+app.post("/api/cotizaciones", (req, res) => {
+  const { nombreCompleto, oficio, descripcion, profesionalId } = req.body;
+  if (!nombreCompleto || !oficio || !descripcion)
+    return res.status(400).json({ error: "Faltan campos." });
+
+  const profesional = usuariosDB.find(
+    (u) =>
+      u.rol === "profesional" &&
+      (profesionalId
+        ? u.id === Number(profesionalId)
+        : u.oficio?.toLowerCase().includes(oficio.toLowerCase())),
+  );
+
+  notificarNuevaCotizacion({
+    emailProfesional: profesional?.email,
+    nombreProfesional: profesional?.nombreCompleto,
+    nombreCliente: nombreCompleto,
+    oficio,
+    descripcion,
+  }).catch((e) => console.error("Error notificando cotización:", e));
+
+  return res.status(201).json({ mensaje: "Solicitud enviada." });
+});
+
+app.post("/api/notifications/resena", (req, res) => {
+  const { profesionalNombre, clienteNombre, estrellas, comentario } = req.body;
+  if (!estrellas)
+    return res.status(400).json({ error: "Falta la calificación." });
+
+  const profesional = usuariosDB.find(
+    (u) => u.rol === "profesional" && u.nombreCompleto === profesionalNombre,
+  );
+
+  notificarNuevaResena({
+    emailProfesional: profesional?.email,
+    nombreProfesional: profesionalNombre,
+    nombreCliente: clienteNombre,
+    estrellas,
+    comentario,
+  }).catch((e) => console.error("Error notificando reseña:", e));
+
+  return res.status(201).json({ mensaje: "Notificación enviada." });
+});
+
+app.use("/api/notifications", notificationRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: "Ruta no encontrada" });

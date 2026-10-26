@@ -48,6 +48,17 @@ export const ResenaForm: React.FC<ResenaFormProps> = ({
 
     setLoading(true);
 
+    fetch("http://localhost:3001/api/notifications/resena", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        profesionalNombre,
+        clienteNombre: `Cliente #${clienteId}`,
+        estrellas: calificacion,
+        comentario: comentario.trim(),
+      }),
+    }).catch((err) => console.error("No se pudo notificar la reseña:", err));
+
     try {
       const response = await fetch("http://localhost:3001/api/resenas", {
         method: "POST",
